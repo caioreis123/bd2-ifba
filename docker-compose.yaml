@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:14.3
+    environment:
+      POSTGRES_USER: caio
+      POSTGRES_PASSWORD: caio
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./data/data.csv:/data.csv
+
+
