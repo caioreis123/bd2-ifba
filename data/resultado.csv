@@ -1,0 +1,4 @@
+ANTECEDENTE,CONSEQUENTE,CONFIANCA,SUPORTE
+cafe,pao,1.0,0.3
+cafe,manteiga,1.0,0.3
+manteiga,pao,0.8,0.4
