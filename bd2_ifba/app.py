@@ -30,7 +30,7 @@ def apriori(dataframe, min_confianca):
             item_frequencia_filtrado[item] = frequencia
 
     # agora pegamos essa lista filtrada e comparamos os itens 2 a 2 buscando a frequencia em que eles aparacem juntos e colocando esses dados uma lista
-    item1_item2_frequencia = []
+    item1_item2_frequencia = [] # exemplo: [['pao', 'leite', '3'], ['lite', 'cafe', '5']]
     for item, frequencia in item_frequencia_filtrado.items():
         for item2, frequencia2 in item_frequencia_filtrado.items():
             if item == item2:
@@ -52,28 +52,30 @@ def apriori(dataframe, min_confianca):
         if item1_item2_frequencia[i][2]/total_de_compras > min_confianca:
             item1_item2_frequencia_filtrada.append(item1_item2_frequencia[i])
 
-    # agora vamos calcular o support de cada dupla e escrever um arquivo csv com esses dados
+    # agora vamos calcular o support e confianca de cada dupla, e escrever um arquivo csv com esses dados
     with open('./data/resultado.csv', mode='w') as arquivo:
         escritor = csv.writer(arquivo, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         escritor.writerow(['ANTECEDENTE', 'CONSEQUENTE', 'CONFIANCA', 'SUPORTE'])
 
-        for dupla in item1_item2_frequencia_filtrada:
-            item = dupla[0]
-            item2 = dupla[1]
-            frequencia_da_dupla = dupla[2]
-            frequencia1 = item_frequencia_filtrado[item]
+        for dupla in item1_item2_frequencia_filtrada: # exemplo: [['pao', 'leite', '3']
+            item, item2, frequencia_da_dupla = dupla
+            frequencia1 = item_frequencia_filtrado[item] #exemplo:{'pao': 3, 'leite': 2, 'cafe': 5}
             frequencia2 = item_frequencia_filtrado[item2]
             suporte_da_dupla = frequencia_da_dupla / total_de_compras
             suporte1 = frequencia1/total_de_compras
             suporte2 = frequencia2/total_de_compras
-            if suporte1 < suporte2:
+            if suporte1 < suporte2: # priorizamos o menor suporte, pois isso vai levar a uma confianca maior, conf=sup(xUy)/sup(x) ou conf=freq(xUy)/freq(x)
                 antecedente = item
                 consequente = item2
+                suporte_do_antecedente = suporte1
             else:
                 antecedente = item2
                 consequente = item
+                suporte_do_antecedente = suporte2
 
             confianca = frequencia_da_dupla/item_frequencia_filtrado[antecedente]
+            confianca_alt = suporte_da_dupla/suporte_do_antecedente # essa confianca alternativa e so para demonstrar as duas formas diferentes de se calcular a confianca
+            assert confianca == confianca_alt
             escritor.writerow([antecedente, consequente, confianca, suporte_da_dupla])
 
 
