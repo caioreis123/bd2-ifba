@@ -10,9 +10,8 @@ def ja_foram_avaliados_juntos(item, item2, lista_item1_item2_frequencia):
     return False
 
 
-def apriori(dataframe):
+def apriori(dataframe, min_confianca):
     dataset = dataframe.values
-    min_confianca = 0.2
     total_de_compras = len(dataset)
 
     # criamos uma lista com todos os itens
@@ -80,6 +79,7 @@ def apriori(dataframe):
 
 if __name__ == "__main__":
     entrada = pd.read_csv('./data/data.csv')
-    apriori(entrada)
+    min_confianca = 0.2
+    apriori(entrada, min_confianca)
     saida = pd.read_csv('./data/resultado.csv')
     print(saida)
